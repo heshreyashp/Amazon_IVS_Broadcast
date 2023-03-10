@@ -4,8 +4,20 @@ plugins {
     id 'kotlin-kapt'
     id 'kotlinx-serialization'
 }
+def appCompatVersion = '1.5.1'
+def coreVersion = '1.9.0'
+def constraintLayoutVersion = '2.1.4'
+def materialDesignVersion = '1.7.0'
+def recyclerViewVersion = '1.2.1'
+def roomVersion = '2.4.3'
+def cardViewVersion = '1.0.0'
+def lifecycleVersion = '2.5.1'
+def daggerVersion = '2.43.2'
 
 android {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
     compileSdk 33
 
     defaultConfig {
@@ -85,4 +97,18 @@ dependencies {
 
     // Broadcast
     implementation 'com.amazonaws:ivs-broadcast:1.7.3'
+
+    // Room components
+    implementation "androidx.room:room-runtime:$roomVersion"
+    implementation "androidx.room:room-ktx:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
+
+    // Android
+    implementation "androidx.recyclerview:recyclerview:$recyclerViewVersion"
+    implementation "androidx.cardview:cardview:$cardViewVersion"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
+
+    // Libraries
+    implementation "com.amazonaws:ivs-player:1.17.0"
 }
