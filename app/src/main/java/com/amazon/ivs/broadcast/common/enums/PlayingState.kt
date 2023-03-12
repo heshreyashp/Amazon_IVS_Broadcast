@@ -1,4 +1,4 @@
-package com.amazon.ivs.broadcast.watchlive.common.enums
+package com.amazonaws.ivs.player.customui.common.enums
 
 /**
  * Player play button states

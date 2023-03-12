@@ -1,4 +1,4 @@
-package com.amazon.ivs.broadcast.watchlive.viewModel
+package com.amazon.ivs.broadcast.viewModel
 
 import android.app.Application
 import android.net.Uri
@@ -8,30 +8,28 @@ import android.util.Log
 import android.view.Surface
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.amazon.ivs.broadcast.watchlive.common.*
+import com.amazon.ivs.broadcast.common.Configuration
+import com.amazon.ivs.broadcast.common.Configuration.TAG
+import com.amazon.ivs.broadcast.common.launchMain
 import com.amazonaws.ivs.player.MediaPlayer
 import com.amazonaws.ivs.player.MediaType
 import com.amazonaws.ivs.player.Player
 import com.amazonaws.ivs.player.TextMetadataCue
-import com.amazon.ivs.broadcast.watchlive.common.Configuration.TAG
-import com.amazon.ivs.broadcast.watchlive.common.enums.PlayingState
-import com.amazon.ivs.broadcast.watchlive.data.LocalCacheProvider
-import com.amazon.ivs.broadcast.watchlive.data.entity.OptionDataItem
-import com.amazon.ivs.broadcast.watchlive.data.entity.SourceDataItem
+import com.amazonaws.ivs.player.customui.common.*
+import com.amazonaws.ivs.player.customui.common.enums.PlayingState
 import java.nio.charset.StandardCharsets
 
 class MainViewModel(
-    private val context: Application,
-    private val cacheProvider: LocalCacheProvider
+    private val context: Application
 ) : ViewModel() {
 
-    private var player: MediaPlayer? = null
+    private var player: Player? = null
     private var playerListener: Player.Listener? = null
 
     private val handler = Handler(Looper.getMainLooper())
     private val updateSeekBarTask = object : Runnable {
         override fun run() {
-            progress.value = player?.position?.timeString()
+            progress.value = player?.position?.toString()
             seekBarProgress.value = player?.position?.toInt()
             seekBarSecondaryProgress.value = player?.bufferedPosition?.toInt()
             if (liveStream.value == false) handler.postDelayed(this, 500)
@@ -60,9 +58,6 @@ class MainViewModel(
     val playerParamsChanged = MutableLiveData<Pair<Int, Int>>()
     val errorHappened = MutableLiveData<Pair<String, String>>()
 
-    val qualities = MutableLiveData<List<OptionDataItem>>()
-    val sources = MutableLiveData<List<SourceDataItem>>()
-
     init {
         initPlayer()
         setPlayerListener()
@@ -84,7 +79,7 @@ class MainViewModel(
 
     private fun setPlayerListener() {
         // Media player listener creation and initialization
-        playerListener = player?.setListener(
+      /*  playerListener = player?.setListener(
             onVideoSizeChanged = { width, height ->
                 Log.d(TAG, "Video size changed: $width $height")
                 playerParamsChanged.value = Pair(width, height)
@@ -128,7 +123,7 @@ class MainViewModel(
                 isPlaying.value = false
             }
         )
-    }
+*/    }
 
     fun toggleControls(show: Boolean) {
         Log.d(TAG, "Toggling controls: $show")
@@ -182,7 +177,7 @@ class MainViewModel(
         Log.d(TAG, "Updating player position: $position")
         // Seeks to a specified position in the stream, in milliseconds
         player?.seekTo(position)
-        progress.value = player?.position?.timeString()
+        progress.value = player?.position?.toString()
     }
 
     fun selectQuality(option: String) {
@@ -201,28 +196,28 @@ class MainViewModel(
     }
 
     fun getPlayerQualities() {
-        val qualityList: MutableList<OptionDataItem> =
-            mutableListOf(
-                OptionDataItem(
-                    Configuration.AUTO,
-                    selectedQualityValue.value == Configuration.AUTO || selectedQualityValue.value == null
-                )
-            )
-        val list = player?.qualities?.map {
-            OptionDataItem(it.name, selectedQualityValue.value == it.name)
-        } ?: listOf()
-        qualityList.addAll(list)
-        qualities.value = qualityList
+//        val qualityList: MutableList<OptionDataItem> =
+//            mutableListOf(
+//                OptionDataItem(
+//                    Configuration.AUTO,
+//                    selectedQualityValue.value == Configuration.AUTO || selectedQualityValue.value == null
+//                )
+//            )
+//        val list = player?.qualities?.map {
+//            OptionDataItem(it.name, selectedQualityValue.value == it.name)
+//        } ?: listOf()
+//        qualityList.addAll(list)
+//        qualities.value = qualityList
     }
 
-    fun getPlayBackRates(): List<OptionDataItem> {
+/*    fun getPlayBackRates(): List<OptionDataItem> {
         return Configuration.PlaybackRate.toMutableList().map {
             OptionDataItem(
                 it,
                 selectedRateValue.value == it || selectedQualityValue.value == Configuration.PLAYBACK_RATE_DEFAULT
             )
         }
-    }
+    }*/
 
     fun setPlaybackRate(option: String) {
         Log.d(TAG, "Setting playback rate: $option")
@@ -233,29 +228,29 @@ class MainViewModel(
     private fun getSources() {
         Log.d(TAG, "Collecting sources")
         launchMain {
-            cacheProvider.sourcesDao().getAll().collect {
+          /*  cacheProvider.sourcesDao().getAll().collect {
                 val itemList: MutableList<SourceDataItem> = mutableListOf(
                     SourceDataItem(Configuration.LIVE_PORTRAIT_LINK, Configuration.PORTRAIT_OPTION),
                     SourceDataItem(Configuration.RECORDED_LANDSCAPE_LINK, Configuration.LANDSCAPE_OPTION)
                 )
                 itemList.addAll(it)
                 sources.value = itemList
-            }
+            }*/
         }
     }
 
     fun deleteSource(url: String) {
         Log.d(TAG, "Deleting source: $url")
-        launchIO {
-            cacheProvider.sourcesDao().delete(url)
-        }
+//        launchIO {
+//            cacheProvider.sourcesDao().delete(url)
+//        }
     }
 
-    fun addSource(source: SourceDataItem) {
-        Log.d(TAG, "Adding source: $source")
-        launchIO {
-            cacheProvider.sourcesDao().insert(source)
-        }
-    }
+//    fun addSource(source: SourceDataItem) {
+//        Log.d(TAG, "Adding source: $source")
+//        launchIO {
+//            cacheProvider.sourcesDao().insert(source)
+//        }
+//    }
 
 }

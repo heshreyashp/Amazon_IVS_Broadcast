@@ -1,8 +1,8 @@
 package com.amazon.ivs.broadcast.injection
 
 import com.amazon.ivs.broadcast.ui.activities.MainActivity
+import com.amazon.ivs.broadcast.ui.activities.WatchMainActivity
 import com.amazon.ivs.broadcast.ui.fragments.BaseFragment
-import com.amazon.ivs.broadcast.watchlive.activities.WatchMainActivity
 import dagger.Component
 import javax.inject.Singleton
 
