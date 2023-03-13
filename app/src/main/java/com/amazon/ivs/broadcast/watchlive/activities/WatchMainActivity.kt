@@ -95,6 +95,8 @@ class WatchMainActivity : AppCompatActivity(), SurfaceHolder.Callback {
     private lateinit var binding: WatchActivityMainBinding
     private lateinit var playerBinding: ViewPlayerControlsBinding
 
+    private lateinit var surfaceView: SurfaceView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = WatchActivityMainBinding.inflate(layoutInflater)
@@ -109,9 +111,9 @@ class WatchMainActivity : AppCompatActivity(), SurfaceHolder.Callback {
                 data = viewModel
                 lifecycleOwner = this@WatchMainActivity
             }
-
+        surfaceView = findViewById(R.id.surface_view)
         // Surface view listener for rotation handling
-        binding.surfaceView.addOnLayoutChangeListener(object : View.OnLayoutChangeListener {
+        surfaceView.addOnLayoutChangeListener(object : View.OnLayoutChangeListener {
             override fun onLayoutChange(
                 v: View?,
                 left: Int,
@@ -127,11 +129,11 @@ class WatchMainActivity : AppCompatActivity(), SurfaceHolder.Callback {
                     val width = viewModel.playerParamsChanged.value?.first
                     val height = viewModel.playerParamsChanged.value?.second
                     if (width != null && height != null) {
-                        binding.surfaceView.post {
+                        surfaceView.post {
                             Log.d(
                                 TAG, "On rotation player layout params changed $width $height"
                             )
-                            fitSurfaceToView(binding.surfaceView, width, height)
+                            fitSurfaceToView(surfaceView, width, height)
                         }
                     }
                 }
@@ -197,7 +199,7 @@ class WatchMainActivity : AppCompatActivity(), SurfaceHolder.Callback {
 
         viewModel.playerParamsChanged.observe(this, Observer {
             Log.d(TAG, "Player layout params changed ${it.first} ${it.second}")
-            fitSurfaceToView(binding.surfaceView, it.first, it.second)
+            fitSurfaceToView(surfaceView, it.first, it.second)
         })
 
         viewModel.errorHappened.observe(this, Observer {
@@ -207,7 +209,7 @@ class WatchMainActivity : AppCompatActivity(), SurfaceHolder.Callback {
 
         initSurface()
         initButtons()
-        viewModel.playerStart(binding.surfaceView.holder.surface)
+        viewModel.playerStart(surfaceView.holder.surface)
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -237,11 +239,16 @@ class WatchMainActivity : AppCompatActivity(), SurfaceHolder.Callback {
         qualityDialog.release()
         rateDialog.release()
         sourceDialog.release()
-        binding.surfaceView.holder.removeCallback(this)
+        surfaceView.holder.removeCallback(this)
     }
 
+
     private fun initSurface() {
-        binding.surfaceView.holder.addCallback(this)
+       // binding.surfaceView.holder.addCallback(this)
+
+
+
+        surfaceView.holder.addCallback(this)
         binding.playerRoot.setOnClickListener {
             Log.d(TAG, "Player screen clicked")
             when (playerBinding.playerControls.visibility) {

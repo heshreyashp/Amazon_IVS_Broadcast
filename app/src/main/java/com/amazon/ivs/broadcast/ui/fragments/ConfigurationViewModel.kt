@@ -118,7 +118,7 @@ class ConfigurationViewModel(
         video.initialBitrate = targetBitrate
         video.maxBitrate = maximumBitrate
         video.minBitrate = minimumBitrate
-        video.size = BroadcastConfiguration.Vec2(resolution.width, resolution.height)
+        video.size = BroadcastConfiguration.Vec2( resolution.height,resolution.width)
         video.targetFramerate = framerate
         video.isUseAutoBitrate = autoAdjustBitrate
         audio.channels = 1

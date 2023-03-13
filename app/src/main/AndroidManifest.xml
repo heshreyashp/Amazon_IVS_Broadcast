@@ -2,35 +2,59 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
+        android:name=".App"
         android:allowBackup="false"
         android:fullBackupContent="false"
-        android:name=".App"
-        android:label="@string/app_name"
-        android:supportsRtl="true"
-        android:theme="@style/Theme.AmazonIVSBroadcast"
         android:icon="@mipmap/ic_launcher"
-        android:roundIcon="@mipmap/ic_launcher_round">
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AmazonIVSBroadcast">
 
-        <service android:name=".common.broadcast.ScreenCaptureService"
-            android:foregroundServiceType="mediaProjection"
-            android:isolatedProcess="false" />
-
-        <activity android:name=".ui.activities.MainActivity"
-            android:supportsPictureInPicture="true"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            tools:targetApi="n"
+        <activity
+            android:name=".watchlive.activities.DashboardActivity"
             android:exported="true">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
+        <service
+            android:name=".common.broadcast.ScreenCaptureService"
+            android:foregroundServiceType="mediaProjection"
+            android:isolatedProcess="false" />
+
+        <activity
+            android:name=".ui.activities.MainActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:supportsPictureInPicture="true"
+            tools:targetApi="n">
+
+            <!--
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            -->
+        </activity>
+        <activity
+            android:name=".watchlive.activities.WatchMainActivity"
+            android:configChanges="orientation|screenLayout|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
