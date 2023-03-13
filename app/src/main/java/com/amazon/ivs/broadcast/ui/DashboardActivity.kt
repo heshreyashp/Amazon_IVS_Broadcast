@@ -1,4 +1,4 @@
-package com.amazon.ivs.broadcast.watchlive.activities
+package com.amazon.ivs.broadcast.ui
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.amazon.ivs.broadcast.R
 import com.amazon.ivs.broadcast.databinding.ActivityDashboardBinding
 import com.amazon.ivs.broadcast.ui.activities.MainActivity
+import com.amazon.ivs.broadcast.watchlive.activities.WatchMainActivity
 
 class DashboardActivity : AppCompatActivity() {
 

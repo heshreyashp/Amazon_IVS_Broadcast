@@ -3,6 +3,7 @@ package com.amazon.ivs.broadcast.watchlive.common
 object Configuration {
     const val TAG = "CustomUI"
     const val LINK = "https://e469233ce600.us-east-1.playback.live-video.net/api/video/v1/us-east-1.028785534216.channel.3n2OKmtbn5av.m3u8"
+//    const val LINK = "https://fcc3ddae59ed.us-west-2.playback.live-video.net/api/video/v1/us-west-2.893648527354.channel.DmumNckWFTqz.m3u8"
     const val PORTRAIT_OPTION = "Live stream Portrait"
     const val LANDSCAPE_OPTION = "Recorded video Landscape"
     const val LIVE_PORTRAIT_LINK = "https://fcc3ddae59ed.us-west-2.playback.live-video.net/api/video/v1/us-west-2.893648527354.channel.YtnrVcQbttF0.m3u8"
