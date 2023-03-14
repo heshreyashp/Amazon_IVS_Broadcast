@@ -111,6 +111,8 @@ class WatchMainActivity : AppCompatActivity(), SurfaceHolder.Callback {
                 data = viewModel
                 lifecycleOwner = this@WatchMainActivity
             }
+
+        qualityDialog.setSheet(binding)
         surfaceView = findViewById(R.id.surface_view)
         // Surface view listener for rotation handling
         surfaceView.addOnLayoutChangeListener(object : View.OnLayoutChangeListener {

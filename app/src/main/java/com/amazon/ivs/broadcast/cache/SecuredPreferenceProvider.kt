@@ -2,6 +2,7 @@ package com.amazon.ivs.broadcast.cache
 
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
+import android.text.TextUtils
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.amazon.ivs.broadcast.App
@@ -13,9 +14,13 @@ const val SECURED_PREFERENCES_NAME = "secured_preferences"
 
 class SecuredPreferenceProvider(val context: App) {
 
-    var serverUrl: String? by stringPreference(BuildConfig.SERVER_URL)
-    var playbackUrl: String? by stringPreference(BuildConfig.PLAYBACK_URL)
-    var streamKey: String? by stringPreference(BuildConfig.STREAM_KEY)
+    var serverUrl: String? =
+        if (!TextUtils.isEmpty(stringPreference(BuildConfig.SERVER_URL).toString())) "rtmps://e469233ce600.global-contribute.live-video.net:443/app/" else ""
+
+    //var playbackUrl: String? by stringPreference(BuildConfig.PLAYBACK_URL)
+    var playbackUrl: String? =
+        "https://www.ivs.rocks/live#https://e469233ce600.us-east-1.playback.live-video.net/api/video/v1/us-east-1.028785534216.channel.3n2OKmtbn5av.m3u8"
+    var streamKey: String? = "sk_us-east-1_ZHdXgiWwdSBj_aMPnOd61beqzaLofTJcV5u4PtrgZET"
 
     private var spec = KeyGenParameterSpec.Builder(
         MasterKey.DEFAULT_MASTER_KEY_ALIAS,
@@ -38,15 +43,16 @@ class SecuredPreferenceProvider(val context: App) {
         EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
     )
 
-    private fun stringPreference(defaultValue: String? = null) = object : ReadWriteProperty<Any?, String?> {
+    private fun stringPreference(defaultValue: String? = null) =
+        object : ReadWriteProperty<Any?, String?> {
 
-        override fun getValue(thisRef: Any?, property: KProperty<*>) = preferences.getString(
-            property.name,
-            defaultValue
-        )
+            override fun getValue(thisRef: Any?, property: KProperty<*>) = preferences.getString(
+                property.name,
+                defaultValue
+            )
 
-        override fun setValue(thisRef: Any?, property: KProperty<*>, value: String?) {
-            preferences.edit().putString(property.name, value).apply()
+            override fun setValue(thisRef: Any?, property: KProperty<*>, value: String?) {
+                preferences.edit().putString(property.name, value).apply()
+            }
         }
-    }
 }

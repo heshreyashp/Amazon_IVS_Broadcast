@@ -1,6 +1,9 @@
 package com.amazon.ivs.broadcast.watchlive.activities.dialogs
 
+import android.view.View
+import android.widget.LinearLayout
 import androidx.lifecycle.Observer
+import com.amazon.ivs.broadcast.databinding.WatchActivityMainBinding
 import com.amazon.ivs.broadcast.watchlive.activities.WatchMainActivity
 import com.amazon.ivs.broadcast.watchlive.activities.adapters.PlayerOptionAdapter
 import com.amazon.ivs.broadcast.watchlive.common.Configuration
@@ -15,8 +18,12 @@ class QualityDialog(
     private val viewModel: MainViewModel
 ) : PlayerOptionAdapter.PlayerOptionCallback {
 
-    //private val qualityMenu by lazy { BottomSheetBehavior.from(activity.quality_sheet) }
+    private lateinit var qualityMenu: BottomSheetBehavior<View>
     private val qualityAdapter by lazy { PlayerOptionAdapter(this) }
+
+    public fun setSheet(binding: WatchActivityMainBinding) {
+        qualityMenu = BottomSheetBehavior.from(binding.surfaceView)
+    }
 
     init {
         initViews()
@@ -31,17 +38,17 @@ class QualityDialog(
     }
 
     fun show() {
-       // qualityMenu.open()
+         qualityMenu.open()
     }
 
     fun dismiss() {
-       // qualityMenu.hide()
+         qualityMenu.hide()
     }
 
-    //fun isOpened() = qualityMenu.isOpened()
+    fun isOpened() = qualityMenu.isOpened()
 
     fun release() {
-     //   qualityMenu.removeBottomSheetCallback(activity.sheetListener)
+           qualityMenu.removeBottomSheetCallback(activity.sheetListener)
     }
 
     override fun onOptionClicked(position: Int) {
